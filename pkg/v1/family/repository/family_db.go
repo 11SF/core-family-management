@@ -40,9 +40,9 @@ func (r *familyDB) GetFamilyById(ctx context.Context, familyId string) (*datamod
 	return &family, nil
 }
 
-func (r *familyDB) GetFamilyList(ctx context.Context, userId string) ([]datamodel.Family, error) {
-	var families []datamodel.Family
-	err := r.db.Where("user_id = ?", userId).Find(&families).Error
+func (r *familyDB) GetFamilyList(ctx context.Context, userId string) (*[]datamodel.Family, error) {
+	families := new([]datamodel.Family)
+	err := r.db.Where("created_by = ?", userId).Find(&families).Error
 	if err != nil {
 		return nil, err
 	}
@@ -60,9 +60,9 @@ func (r *familyDB) UpdateFamilyInfo(ctx context.Context, family *datamodel.Famil
 }
 
 func (r *familyDB) UpdateFamilyPrices(ctx context.Context, familyId string, prices []datamodel.Prices) error {
-	err := r.db.Model(&datamodel.Prices{}).Where("family_id = ?", familyId).Updates(prices).Error
-	if err != nil {
-		return err
-	}
+	// err := r.db.Model(&datamodel.Prices{}).Where("family_id = ?", familyId).Updates(prices).Error
+	// if err != nil {
+	// 	return err
+	// }
 	return nil
 }

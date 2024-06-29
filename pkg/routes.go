@@ -48,9 +48,11 @@ func (r *routes) RegisterRoutes() {
 	coreFamily := corefamily.NewService(dbFamily, redisFamily)
 	createFamilyHandler := handler.NewCreateFamilyHandler(coreFamily.CreateFamily)
 	getFamilyInfoHandler := handler.NewGetFamilyInfoHandler(coreFamily.GetFamilyInfo)
+	getFamilyListHandler := handler.NewGetFamilyListHandler(coreFamily.GetFamilyList)
 
 	v1.Post("/family", createFamilyHandler.Handler)
 	v1.Get("/family/:familyId", getFamilyInfoHandler.Handler)
+	v1.Get("/family", getFamilyListHandler.Handler)
 
 	app.Listen(fmt.Sprintf(":%s", r.config.Server.Port))
 }

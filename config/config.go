@@ -34,7 +34,8 @@ type redisConfig struct {
 }
 
 type RedisKeys struct {
-	Family string `env:"REDIS_KEY_FAMILY"`
+	Family     string `env:"REDIS_KEY_FAMILY"`
+	FamilyList string `env:"REDIS_KEY_FAMILY_LIST"`
 }
 
 func InitConfig() *Config {

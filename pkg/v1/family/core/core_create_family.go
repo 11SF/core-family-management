@@ -17,6 +17,8 @@ func (s *service) CreateFamily(ctx context.Context, family *datamodel.Family) (s
 
 	slog.Info("Starting to create family", slog.String("tag", "core create family"))
 
+	userId := ctx.Value("userId").(string)
+
 	uuid, err := uuid.NewV7()
 	if err != nil {
 		slog.Error("fail to generate uuid", slog.String("error", err.Error()), slog.String("tag", "core create family"))
@@ -31,12 +33,18 @@ func (s *service) CreateFamily(ctx context.Context, family *datamodel.Family) (s
 	}
 	family.PricesString = string(priceByte)
 	family.CreatedAt = time.Now()
-	family.CreatedBy = ctx.Value("userId").(string)
+	family.CreatedBy = userId
 
 	err = s.db.CreateFamily(ctx, family)
 	if err != nil {
 		slog.Error("fail to create family in db", slog.String("error", err.Error()), slog.String("tag", "core create family"))
 		return "", response.NewError("CFM552", err.Error())
+	}
+
+	err = s.redis.DeleteFamilyList(ctx, userId)
+	if err != nil {
+		slog.Error("fail to delete family list in redis", slog.String("error", err.Error()), slog.String("tag", "core create family"))
+		return "", response.NewError("CFM553", err.Error())
 	}
 
 	slog.Info("Create family success", slog.String("tag", "core create family"))
