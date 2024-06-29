@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"errors"
+	"time"
 
 	"github.com/11SF/core-family-management/pkg/v1/datamodel"
 	"gorm.io/gorm"
@@ -65,7 +66,13 @@ func (r *familyDB) UpdateFamilyInfo(ctx context.Context, family *datamodel.Famil
 }
 
 func (r *familyDB) DeleteFamily(ctx context.Context, familyId string, userId string) error {
-	result := r.db.Where("id = ? AND created_by = ?", familyId, userId).Delete(&datamodel.Family{})
+	result := r.db.Model(&datamodel.Family{}).
+		Where("id = ? AND created_by = ?", familyId, userId).
+		Updates(datamodel.Family{
+			DeletedAt: gorm.DeletedAt{Time: time.Now(), Valid: true},
+			DeletedBy: userId,
+		})
+
 	if result.Error != nil {
 		return result.Error
 	}

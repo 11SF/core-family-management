@@ -8,7 +8,6 @@ require (
 	github.com/11SF/go-common v0.0.0-00010101000000-000000000000
 	github.com/caarlos0/env/v6 v6.10.1
 	github.com/go-playground/validator/v10 v10.22.0
-	github.com/go-redis/redis/v8 v8.11.5
 	github.com/gofiber/fiber/v2 v2.52.4
 	github.com/google/uuid v1.5.0
 	github.com/joho/godotenv v1.5.1
