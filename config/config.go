@@ -8,12 +8,33 @@ import (
 )
 
 type Config struct {
-	AppName string
-	Server  appConfig
+	AppName   string `env:"APP_NAME"`
+	Server    appConfig
+	Database  databaseConfig
+	Redis     redisConfig
+	RedisKeys RedisKeys
 }
 
 type appConfig struct {
-	Port string
+	Port string `env:"APP_PORT"`
+}
+
+type databaseConfig struct {
+	Host     string `env:"DB_HOST"`
+	Port     int    `env:"DB_PORT"`
+	Username string `env:"DB_USERNAME"`
+	Password string `env:"DB_PASSWORD"`
+	Database string `env:"DB_DATABASE"`
+}
+
+type redisConfig struct {
+	Host     string `env:"REDIS_HOST"`
+	Port     int    `env:"REDIS_PORT"`
+	Password string `env:"REDIS_PASSWORD"`
+}
+
+type RedisKeys struct {
+	Family string `env:"REDIS_KEY_FAMILY"`
 }
 
 func InitConfig() *Config {
@@ -21,9 +42,10 @@ func InitConfig() *Config {
 	config := new(Config)
 
 	slog.Info("[env] start loading env")
-	err := godotenv.Load("./configs/.env")
+	err := godotenv.Load("./config/.env")
 	if err != nil {
 		slog.Error("[env] unable to load .env file", "error", err)
+		panic(0)
 	}
 	err = env.Parse(config)
 	if err != nil {
