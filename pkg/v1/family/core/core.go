@@ -16,9 +16,8 @@ type IService interface {
 	CreateFamily(ctx context.Context, family *datamodel.Family) (string, error)
 	GetFamilyInfo(ctx context.Context, familyId string) (*datamodel.Family, error)
 	GetFamilyList(ctx context.Context) (*[]datamodel.Family, error)
-	// UpdateFamilyInfo(ctx context.Context, family *datamodel.Family) error
-	// UpdateFamilyPrices(ctx context.Context, familyId string, prices []datamodel.Prices) error
-	// DeleteFamily(ctx context.Context, familyId string) error
+	UpdateFamilyInfo(ctx context.Context, family *datamodel.Family) error
+	DeleteFamily(ctx context.Context, familyId string) error
 }
 
 func NewService(db repository.IFamilyDB, redis repository.IFamilyRedis) IService {

@@ -49,10 +49,14 @@ func (r *routes) RegisterRoutes() {
 	createFamilyHandler := handler.NewCreateFamilyHandler(coreFamily.CreateFamily)
 	getFamilyInfoHandler := handler.NewGetFamilyInfoHandler(coreFamily.GetFamilyInfo)
 	getFamilyListHandler := handler.NewGetFamilyListHandler(coreFamily.GetFamilyList)
+	updateFamilyInfoHandler := handler.NewUpdateFamilyInfoHandler(coreFamily.UpdateFamilyInfo)
+	deleteFamilyHandler := handler.NewDeleteFamilyHandler(coreFamily.DeleteFamily)
 
 	v1.Post("/family", createFamilyHandler.Handler)
 	v1.Get("/family/:familyId", getFamilyInfoHandler.Handler)
 	v1.Get("/family", getFamilyListHandler.Handler)
+	v1.Put("/family", updateFamilyInfoHandler.Handler)
+	v1.Delete("/family/:familyId", deleteFamilyHandler.Handler)
 
 	app.Listen(fmt.Sprintf(":%s", r.config.Server.Port))
 }

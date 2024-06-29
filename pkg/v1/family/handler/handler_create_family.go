@@ -17,9 +17,9 @@ type createFamilyHandler struct {
 }
 
 type createFamilyRequest struct {
-	Name            string   `json:"name" validate:"required"`
+	Name            string   `json:"name" validate:"required,max=50"`
 	Platform        string   `json:"platform" validate:"required"`
-	DueDate         int      `json:"dueDate" validate:"required"`
+	DueDate         int      `json:"dueDate" validate:"required,gte=1,lte=31"`
 	PromptPayNumber string   `json:"promptPayNumber" validate:"required"`
 	Prices          []prices `json:"prices" validate:"omitempty,dive"`
 }

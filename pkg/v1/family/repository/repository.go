@@ -10,9 +10,8 @@ type IFamilyDB interface {
 	CreateFamily(ctx context.Context, family *datamodel.Family) error
 	GetFamilyById(ctx context.Context, familyId string) (*datamodel.Family, error)
 	GetFamilyList(ctx context.Context, userId string) (*[]datamodel.Family, error)
-	// UpdateFamilyInfo(ctx context.Context, family *datamodel.Family) error
-	// UpdateFamilyPrices(ctx context.Context, familyId string, prices []datamodel.Prices) error
-	// DeleteFamily(ctx context.Context, familyId string) error
+	UpdateFamilyInfo(ctx context.Context, family *datamodel.Family, userId string) error
+	DeleteFamily(ctx context.Context, familyId string, userId string) error
 }
 
 type IFamilyRedis interface {

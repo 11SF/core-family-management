@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"errors"
 
 	"github.com/11SF/core-family-management/pkg/v1/datamodel"
 	"gorm.io/gorm"
@@ -50,19 +51,28 @@ func (r *familyDB) GetFamilyList(ctx context.Context, userId string) (*[]datamod
 	return families, nil
 }
 
-func (r *familyDB) UpdateFamilyInfo(ctx context.Context, family *datamodel.Family) error {
-	err := r.db.Model(family).Updates(family).Error
-	if err != nil {
-		return err
+func (r *familyDB) UpdateFamilyInfo(ctx context.Context, family *datamodel.Family, userId string) error {
+	result := r.db.Model(family).Where("created_by = ?", userId).Updates(family)
+	if result.Error != nil {
+		return result.Error
+	}
+
+	if result.RowsAffected == 0 {
+		return errors.New("family not found")
 	}
 
 	return nil
 }
 
-func (r *familyDB) UpdateFamilyPrices(ctx context.Context, familyId string, prices []datamodel.Prices) error {
-	// err := r.db.Model(&datamodel.Prices{}).Where("family_id = ?", familyId).Updates(prices).Error
-	// if err != nil {
-	// 	return err
-	// }
+func (r *familyDB) DeleteFamily(ctx context.Context, familyId string, userId string) error {
+	result := r.db.Where("id = ? AND created_by = ?", familyId, userId).Delete(&datamodel.Family{})
+	if result.Error != nil {
+		return result.Error
+	}
+
+	if result.RowsAffected == 0 {
+		return errors.New("family not found")
+	}
+
 	return nil
 }
